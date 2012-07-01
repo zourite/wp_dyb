@@ -25,7 +25,7 @@ Author URI: http://www.saugrin-sonia.fr/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+//setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
 class wp_dyb {
 
@@ -33,15 +33,6 @@ class wp_dyb {
  function __construct(){
  
 	add_action('admin_menu', array(&$this,'dyb_menu'));
-	
-wp_register_sidebar_widget(
-    'wp_dyb_status',        // your unique widget id
-    'Status DoYouBuzz',          // widget name
-    array(&$this,'dyb_status'),  // callback function
-    array(                  // options
-        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
-    ));
-	
      }
 
 function dyb_menu() {
@@ -118,7 +109,7 @@ function dyb_views() {
 	
 	function dyb_skill(){
 	
-	$arr = $this->xmlUrl();
+	$arr = xmlUrl();
 	
 	$competences = $arr['CandidateProfile']['PersonQualifications']['PersonCompetency'];
 
@@ -145,7 +136,7 @@ function dyb_views() {
      	 	
      	 	foreach($cat as $key=>$value) :
      	
-     	 		echo '<p><strong>'.$value.'</strong></p>';
+     	 		echo $value.'</br>';
      	 	
      	 		echo '<ul>';
      	 		
@@ -169,13 +160,13 @@ function dyb_views() {
 	 {
 	
 		include(dirname(__FILE__) .'/country.php');
-		$arr = $this->xmlUrl();
+		$arr = xmlUrl();
 		$employment = $arr['CandidateProfile']['EmploymentHistory']['EmployerHistory'];
 	
 		foreach($employment as $value) : ?>
      	 		
    			<p>
-   			<strong><?php echo $value['PositionHistory']['PositionTitle'] ?></strong> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a><br/>
+   			<?php echo $value['PositionHistory']['PositionTitle'] ?> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a></br>
 <small> <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['StartDate']['FormattedDateTime']))  ?> à <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['EndDate']['FormattedDateTime']))  ?> | <?php echo $value['PositionHistory']['PositionLocation']['ReferenceLocation']['CityName'] ?> - <?php echo $ar_countries[$value['PositionHistory']['PositionLocation']['ReferenceLocation']['CountryCode']] ?></small>
    			</p>
      <ul>	 		
@@ -196,14 +187,14 @@ function dyb_views() {
 		
 		$arr = $this->xmlUrl();
 		$status = $arr['PositionSeekingStatusCode'];
-		$img_active = '<img style="vertical-align : middle" src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/circle-green.png"/> ';
+		$img_active = WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/img/circle-green.png';
 		
-		if($status == 'Active') echo "Je suis à la recherche d'un poste";
-		if($status == 'Passive') echo $img_active.'Ouvert aux opportunités';
+		if($status == 'Active') echo "<img src="$img_active" /> Je suis à la recherche d'un poste";
+		if($status == 'Passive') echo 'Ouvert aux opportunités';
 		
 	}
 	
-	function dyb_intro()
+		public function dyb_intro()
 	 
 	 {
 	 	$arr = $this->xmlUrl();		
@@ -211,15 +202,7 @@ function dyb_views() {
 		$contact = $arr['CandidatePerson']['Communication'];
 				
 		echo $summary;
-				
-	}
-	
-	function dyb_contact()
-	 
-	 {
-	 	$arr = $this->xmlUrl();		
-		$contact = $arr['CandidatePerson']['Communication'];
-				
+		
 		foreach($contact as $value):
 		
 			if($value['ChannelCode'] == 'Web'):
@@ -233,15 +216,22 @@ function dyb_views() {
 				$position2 = strlen($value['URI']) - strpos($value['URI'], '.' , $position);
 				$service = substr($value['URI'], 7, -$position2);
 				endif;
-					
-					if(!preg_match('/'.$service.'/', $_SERVER['HTTP_HOST'])):
-						echo '<a href="'.$value['URI'].'">'.'<img src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/'.$service.'.png" alt="'.$service.'.png"/></a> ';
-					endif;
+				
+		
+		
+		
+		echo $service.'<br/>';
+		echo $position.'1<br/>';
+		echo $position2.'2<br/>';
+		
 			endif;
 		
 		endforeach;
 		
-		
+		echo '<pre>';
+		print_r($contact);
+		echo '</pre>';
+
 	}
 		
 	function dyb_formation() {
@@ -259,38 +249,5 @@ function dyb_views() {
 	
 	}
 $wp_dyb = new wp_dyb();	
-
-function wp_dyb($section) {
-
-  global $wp_dyb;
-  
-  if($section == 'status'){
-  	
-  	return $wp_dyb->dyb_status();
-  	
-  }
-  
-  if($section == 'employment'){
-  	
-  	return $wp_dyb->dyb_employment();
-  	
-  }
- 
-  if($section == 'skill'){
-  	
-  	return $wp_dyb->dyb_skill();
-  	
-  }
-  
-   if($section == 'contact'){
-  	
-  	return $wp_dyb->dyb_contact();
-  	
-  }
-  
-  //return $wp_dyb;
-  
-  
-}
 
 ?>

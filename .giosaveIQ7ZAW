@@ -175,7 +175,7 @@ function dyb_views() {
 		foreach($employment as $value) : ?>
      	 		
    			<p>
-   			<strong><?php echo $value['PositionHistory']['PositionTitle'] ?></strong> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a><br/>
+   			<strong><?php echo $value['PositionHistory']['PositionTitle'] ?></strong> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a></br>
 <small> <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['StartDate']['FormattedDateTime']))  ?> à <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['EndDate']['FormattedDateTime']))  ?> | <?php echo $value['PositionHistory']['PositionLocation']['ReferenceLocation']['CityName'] ?> - <?php echo $ar_countries[$value['PositionHistory']['PositionLocation']['ReferenceLocation']['CountryCode']] ?></small>
    			</p>
      <ul>	 		
@@ -234,8 +234,8 @@ function dyb_views() {
 				$service = substr($value['URI'], 7, -$position2);
 				endif;
 					
-					if(!preg_match('/'.$service.'/', $_SERVER['HTTP_HOST'])):
-						echo '<a href="'.$value['URI'].'">'.'<img src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/'.$service.'.png" alt="'.$service.'.png"/></a> ';
+					if($service != $_SERVER['HTTP_HOST']):
+						echo '<a href="'.$value['URI'].'">'.$service.'</a> ';
 					endif;
 			endif;
 		

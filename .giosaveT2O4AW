@@ -145,7 +145,7 @@ function dyb_views() {
      	 	
      	 	foreach($cat as $key=>$value) :
      	
-     	 		echo '<p><strong>'.$value.'</strong></p>';
+     	 		echo '<h3>'.$value.'</h3>';
      	 	
      	 		echo '<ul>';
      	 		
@@ -175,7 +175,7 @@ function dyb_views() {
 		foreach($employment as $value) : ?>
      	 		
    			<p>
-   			<strong><?php echo $value['PositionHistory']['PositionTitle'] ?></strong> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a><br/>
+   			<?php echo $value['PositionHistory']['PositionTitle'] ?> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a></br>
 <small> <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['StartDate']['FormattedDateTime']))  ?> à <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['EndDate']['FormattedDateTime']))  ?> | <?php echo $value['PositionHistory']['PositionLocation']['ReferenceLocation']['CityName'] ?> - <?php echo $ar_countries[$value['PositionHistory']['PositionLocation']['ReferenceLocation']['CountryCode']] ?></small>
    			</p>
      <ul>	 		
@@ -203,7 +203,7 @@ function dyb_views() {
 		
 	}
 	
-	function dyb_intro()
+		public function dyb_intro()
 	 
 	 {
 	 	$arr = $this->xmlUrl();		
@@ -211,15 +211,7 @@ function dyb_views() {
 		$contact = $arr['CandidatePerson']['Communication'];
 				
 		echo $summary;
-				
-	}
-	
-	function dyb_contact()
-	 
-	 {
-	 	$arr = $this->xmlUrl();		
-		$contact = $arr['CandidatePerson']['Communication'];
-				
+		
 		foreach($contact as $value):
 		
 			if($value['ChannelCode'] == 'Web'):
@@ -234,13 +226,11 @@ function dyb_views() {
 				$service = substr($value['URI'], 7, -$position2);
 				endif;
 					
-					if(!preg_match('/'.$service.'/', $_SERVER['HTTP_HOST'])):
-						echo '<a href="'.$value['URI'].'">'.'<img src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/'.$service.'.png" alt="'.$service.'.png"/></a> ';
-					endif;
+				echo '<a href="'.$value['URI'].'">'.$service.'</a>';
+	
 			endif;
 		
 		endforeach;
-		
 		
 	}
 		
@@ -279,12 +269,6 @@ function wp_dyb($section) {
   if($section == 'skill'){
   	
   	return $wp_dyb->dyb_skill();
-  	
-  }
-  
-   if($section == 'contact'){
-  	
-  	return $wp_dyb->dyb_contact();
   	
   }
   
