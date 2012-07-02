@@ -34,19 +34,42 @@ class wp_dyb {
  
 	add_action('admin_menu', array(&$this,'dyb_menu'));
 	
-wp_register_sidebar_widget(
-    'wp_dyb_status',        // your unique widget id
-    'Status DoYouBuzz',          // widget name
-    array(&$this,'dyb_status'),  // callback function
-    array(                  // options
+	wp_register_sidebar_widget(
+    	
+    	'wp_dyb_status',        // your unique widget id
+    	'Statut DoYouBuzz',          // widget name
+    	array(&$this,'dyb_status'),  // callback function
+    	array(                  // options
         'description' => "Affiche la disponibilité pour un poste ou des opportunités"
-    ));
+    	));
+	
+     }
+
+     wp_register_sidebar_widget(
+    	
+    	'wp_dyb_status',        // your unique widget id
+    	'Compétences DoYouBuzz',          // widget name
+    	array(&$this,'dyb_skill'),  // callback function
+    	array(                  // options
+        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
+    	));
+	
+     }
+
+    wp_register_sidebar_widget(
+    	
+    	'wp_dyb_status',        // your unique widget id
+    	'Statut DoYouBuzz',          // widget name
+    	array(&$this,'dyb_status'),  // callback function
+    	array(                  // options
+        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
+    	));
 	
      }
 
 function dyb_menu() {
 	
-	add_menu_page( 'Dyb Options', 'Dyb', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),'' );
+	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz.png') );
 }
 
 function dyb_views() {
@@ -68,10 +91,10 @@ function dyb_views() {
 
 
  function save_link() {
-	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/toto.txt', "w");
+	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "w");
 	fwrite($fp,$_POST['hr-xml']);
 	fseek($fp, 0);
-	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/toto.txt'));
+	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt'));
 	print_r($contents);
 	fclose($fp);
 }
@@ -102,8 +125,8 @@ function dyb_views() {
 
 	function xmlUrl(){
 	
-	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/toto.txt', "r");
-	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/toto.txt'));
+	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "r");
+	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt'));
 	fclose($fp);
 	
 	$carac = array('oa:', '\oa:');	
@@ -287,9 +310,7 @@ function wp_dyb($section) {
   	return $wp_dyb->dyb_contact();
   	
   }
-  
-  //return $wp_dyb;
-  
+    
   
 }
 
