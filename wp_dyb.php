@@ -41,35 +41,38 @@ class wp_dyb {
     	array(&$this,'dyb_status'),  // callback function
     	array(                  // options
         'description' => "Affiche la disponibilité pour un poste ou des opportunités"
-    	));
-	
-     }
-
-     wp_register_sidebar_widget(
     	
-    	'wp_dyb_status',        // your unique widget id
+    	));
+
+	wp_register_sidebar_widget(
+    	
+    	'wp_dyb_skill',        // your unique widget id
     	'Compétences DoYouBuzz',          // widget name
     	array(&$this,'dyb_skill'),  // callback function
-    	array(                  // options
-        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
+    	array( 
+    	                 // options
+        'description' => "Affiche la liste des compétences de votre CV"
+    	
     	));
+
+	wp_register_sidebar_widget(
+    	
+    	'wp_dyb_employment',        // your unique widget id
+    	'Experience DoYouBuzz',          // widget name
+    	array(&$this,'dyb_employment'),  // callback function
+    	array(  
+    	                // options
+        'description' => "Affiche vos experiences professionnelle"
+    	
+    	));
+
 	
      }
 
-    wp_register_sidebar_widget(
-    	
-    	'wp_dyb_status',        // your unique widget id
-    	'Statut DoYouBuzz',          // widget name
-    	array(&$this,'dyb_status'),  // callback function
-    	array(                  // options
-        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
-    	));
-	
-     }
 
 function dyb_menu() {
 	
-	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz.png') );
+	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz_16.png') );
 }
 
 function dyb_views() {
