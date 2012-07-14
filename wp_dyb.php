@@ -82,6 +82,7 @@ function dyb_views() {
 	}
 	
 	if ( array_key_exists('submit',$_POST) ):
+			
 			$this->save_link();
 	
 	else :
@@ -94,11 +95,14 @@ function dyb_views() {
 
 
  function save_link() {
+
 	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "w");
 	fwrite($fp,$_POST['hr-xml']);
 	fseek($fp, 0);
 	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt'));
-	print_r($contents);
+		
+	echo " Liens sauvegarder avec succes";
+
 	fclose($fp);
 }
 
