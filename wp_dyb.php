@@ -97,11 +97,12 @@ function dyb_views() {
  function save_link() {
 
 	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "w");
+	
 	fwrite($fp,$_POST['hr-xml']);
+	
 	fseek($fp, 0);
-	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt'));
-		
-	echo " Liens sauvegarder avec succes";
+	
+	echo "<p><strong>Liens sauvegarder avec succes</strong></p>";
 
 	fclose($fp);
 }
