@@ -25,13 +25,16 @@ Author URI: http://www.saugrin-sonia.fr/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+require WP_PLUGIN_DIR.'/wp_dyb/lib/oauth.php';
 
 class wp_dyb {
 
 
  function __construct(){
  
+  $this->token = get_option( 'token_dyb', 'FALSE' ); 
+  $this->token_secret = get_option( 'token_secret', 'FALSE' );
+
 	add_action('admin_menu', array(&$this,'dyb_menu'));
 	
 	wp_register_sidebar_widget(
@@ -66,45 +69,92 @@ class wp_dyb {
     	
     	));
 
-	
-     }
+  }
 
 
 function dyb_menu() {
 	
 	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz_16.png') );
+  add_option("token_dyb", $_SESSION['access_token']);
+  add_option("token_secret", $_SESSION['token_access_secret']);
+
+}
+
+function dyb_info_api() {
+
+  $this->key = 'ZK8Pkir-htOxEKgy7x8O';
+  $this->secret = 'WnIiPN6Z3t7EnHCjwTY_uZG6f';
+  $format = 'json';
+  $site_url = admin_url().'admin.php'; // Your site url (example : http://sandbox.local/dyb/)
+  $this->callback_url = '?page=dyb-zourite'; // Your relative callback URL
+
+  return $OAUTH = new Oauth($site_url);
+
 }
 
 function dyb_views() {
 
-	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
-	}
-	
-	if ( array_key_exists('submit',$_POST) ):
-			
-			$this->save_link();
-	
-	else :
-	 
-	include 'view.php';
-	
-	endif;
+  session_start();
+  
+  $OAUTH = $this->dyb_info_api();
 
+  if ($this->token == ''):
+
+    if (isset($_GET['oauth_token'])):
+
+      $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
+      //$OAUTH->set_callback($callback_url);
+
+      if(!isset($_SESSION['access_token'])) { 
+      $token = $OAUTH->get_access_token($_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['token_secret']);
+      $_SESSION['access_token'] = $token['access_token'];
+      $_SESSION['token_access_secret'] = $token['token_secret'];
+      }
+
+      update_option("token_dyb", $_SESSION['access_token']);
+      update_option("token_secret", $_SESSION['token_access_secret']);
+      
+      $this->views_user();
+
+    else :
+
+      session_unset();
+    
+      $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
+      $OAUTH->set_callback($this->callback_url);
+  
+      $OAUTH->get_request_token();
+
+      echo '<a href="'.$OAUTH->get_user_authorization().'">test</a>';
+  
+    endif;
+  
+  else :  
+
+    $this->views_user();
+
+  endif;
+}
+
+function info_user() {
+
+   $OAUTH = $this->dyb_info_api();
+
+   $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
+
+	 $info = $OAUTH->request('http://api.doyoubuzz.com/user', array(), $this->token, $this->token_secret);
+
+   return $info = $this->xmlstring($info);
+  
 }
 
 
- function save_link() {
+function views_user() {
 
-	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "w");
-	
-	fwrite($fp,$_POST['hr-xml']);
-	
-	fseek($fp, 0);
-	
-	echo "<p><strong>Liens sauvegarder avec succes</strong></p>";
+  $info = $this->info_user();
 
-	fclose($fp);
+  include 'view.php';
+
 }
 
 	function objectsIntoArray($arrObjData, $arrSkipIndices = array())
@@ -131,91 +181,113 @@ function dyb_views() {
     return $arrData;
 }
 
-	function xmlUrl(){
+function xmlstring($xmlStr){
 	
-	$fp = fopen(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt', "r");
-	$contents = fread($fp,filesize(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/liens.txt'));
-	fclose($fp);
-	
-	$carac = array('oa:', '\oa:');	
-	$xmlUrl = $contents; // XML feed file/URL
-	$xmlStr = file_get_contents($xmlUrl);
-	$xmlStr = str_replace ( $carac , '', $xmlStr);
 	$xmlObj = simplexml_load_string($xmlStr);
 		
 	return $this->objectsIntoArray($xmlObj);
 	
-	}	
-	
-	function dyb_skill(){
-	
-	$arr = $this->xmlUrl();
-	
-	$competences = $arr['CandidateProfile']['PersonQualifications']['PersonCompetency'];
+}
 
-	$id = array();
-    $cat = array();
-     	 	
-     	 	foreach ($competences as $compet): 
+function info_cv() {
+
+    $OAUTH = $this->dyb_info_api();
+
+    $info = $this->info_user();
+
+    $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
     
-     	 		$position = strpos($compet['CompetencyID'], '_' );
-     	 	
-     	 			if ($position == FALSE  ) :
-     	 	
-     	 			$cat[$compet[CompetencyID]] .= $compet[CompetencyName];
-     	 
-     	 			else :
-     	 	
-     	 			$position = strlen($compet['CompetencyID']) -$position;
-     	 
-     	 			$id[$compet[CompetencyName]] .= substr($compet['CompetencyID'], 0, -$position);
-    	
-     	 			endif;
-     	 
-     	 	endforeach;  
-     	 	
-     	 	foreach($cat as $key=>$value) :
+    if ($info['user']['premium'] == '1') :
+  
+      $id = $xml['user']['resumes']['resume'][0]['id'];
+    
+    else :
+
+      $id = $info['user']['resumes']['resume']['id'];
+
+    endif;
+  
+
+    $cv = $OAUTH->request("http://api.doyoubuzz.com/cv/$id", array(), $this->token, $this->token_secret);
+
+    $cv = $this->xmlstring($cv);
+
+    return $cv;
+
+}	
+	
+function dyb_skill(){
+	
+	$arr = $this->info_cv() ;
+
+  $competences = $arr['resume']['skills']['skill'];
+
+     	foreach($competences as $compet) :
      	
-     	 		echo '<p><strong>'.$value.'</strong></p>';
+     	 		echo '<p><strong>'.$compet['title'].'</strong></p>';
      	 	
      	 		echo '<ul>';
      	 		
-     	 		$comp = array_keys($id,$key);
+     	 			foreach($compet['children'] as $value) :
+
+            if(isset($value[0])):
+
+
+              foreach($value as $listskill) :
+
+              echo '<li>'.$listskill['title'].'</li>';
+
+              endforeach;
+
+            else : 
      	 		
-     	 			foreach($comp as $value) :
-     	 		
-     	 			echo '<li>'.$value.'</li>';
-     	 		
+     	 			  echo '<li>'.$value['title'].'</li>';
+     	 		 
+            endif;
+   
+
      	 			endforeach;
      	 			
      	 		echo '</ul>';	
      	 		
      	 	endforeach;
-	
-	
+
 }
 
 	 function dyb_employment()
 	 
 	 {
-	
+	 
+    global $wp_locale;
 		include(dirname(__FILE__) .'/country.php');
-		$arr = $this->xmlUrl();
-		$employment = $arr['CandidateProfile']['EmploymentHistory']['EmployerHistory'];
+		$arr = $this->info_cv();
+		
+    $employment = $arr['resume']['experiences']['experience'];
 	
-		foreach($employment as $value) : ?>
-     	 		
+		foreach($employment as $value) : 
+
+      $img = $value['logo'];
+
+      ?>
+     	 		      
    			<p>
-   			<strong><?php echo $value['PositionHistory']['PositionTitle'] ?></strong> chez <a href="<?php echo $value['InternetDomainName'] ?>"> <?php echo $value['OrganizationName']; ?></a><br/>
-<small> <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['StartDate']['FormattedDateTime']))  ?> à <?php echo strftime ("%B-%Y",strtotime($value['EmploymentPeriod']['EndDate']['FormattedDateTime']))  ?> | <?php echo $value['PositionHistory']['PositionLocation']['ReferenceLocation']['CityName'] ?> - <?php echo $ar_countries[$value['PositionHistory']['PositionLocation']['ReferenceLocation']['CountryCode']] ?></small>
+   			<strong><?php echo $value['title'] ?></strong> chez <?php echo $value['company'] ?><br/>
+<small> <?php echo date_i18n(get_option('date_format') ,strtotime($value['start']))  ?> au <?php echo date_i18n(get_option('date_format'), strtotime($value['end']))  ?> | <?php echo $value['city'] ?> - <?php echo $country[$value['country']['isoCode']]['name'] ?></small>
    			</p>
+
+         <?php if(!empty($img)):?>
+
+          <img style="float:right" src="http://doyoubuzz.com/<?php echo $img ?>" />
+
+          <?php endif; ?>
+ 
      <ul>	 		
      	<?php 
-     		$desc = explode("\n", $value['PositionHistory']['Description']); 
+     		//$desc = explode("\n", $value['PositionHistory']['Description']); 
      
-     	foreach($desc as $value) :
+     	foreach($value['missions']['mission'] as $mission) :
      
-     	echo '<li>'.$value.'</li>';
+     	echo '<li>'.$mission['description'].'</li>';
      
     	endforeach; ?>
      </ul>
@@ -225,7 +297,14 @@ function dyb_views() {
 	
 	function dyb_status() {
 		
-		$arr = $this->xmlUrl();
+		$arr = $this->info_cv();
+
+                      //
+    echo "<pre>";
+    print_r($arr['resume']['availability']);
+    echo "</pre>";
+   
+    //*/
 		$status = $arr['PositionSeekingStatusCode'];
 		$img_active = '<img style="vertical-align : middle" src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/circle-green.png"/> ';
 		
@@ -237,9 +316,12 @@ function dyb_views() {
 	function dyb_intro()
 	 
 	 {
-	 	$arr = $this->xmlUrl();		
-		$summary = $arr['CandidateProfile']['ExecutiveSummary'];
-		$contact = $arr['CandidatePerson']['Communication'];
+
+    $arr = $this->info_cv();
+		
+
+    $summary = $arr['resume']['presentation']['text'];
+	
 				
 		echo $summary;
 				
@@ -248,42 +330,54 @@ function dyb_views() {
 	function dyb_contact()
 	 
 	 {
-	 	$arr = $this->xmlUrl();		
-		$contact = $arr['CandidatePerson']['Communication'];
+	 	
+    $arr = $this->info_cv();
+
+		$contact = $arr['resume']['links']['link'];
 				
 		foreach($contact as $value):
 		
-			if($value['ChannelCode'] == 'Web'):
-				
-				$position = strpos($value['URI'], 'www.' );
-				$position2 = strlen($value['URI']) - strpos($value['URI'], '.' , $position+4);
-				$service = substr($value['URI'], 11, -$position2);
+
+				$position = strpos($value['url'], 'www.' );
+				$position2 = strlen($value['url']) - strpos($value['url'], '.' , $position+4);
+				$service = substr($value['url'], 11, -$position2);
 				
 				if($position == FALSE) :
-				$position =  strpos($value['URI'], '.' );
-				$position2 = strlen($value['URI']) - strpos($value['URI'], '.' , $position);
-				$service = substr($value['URI'], 7, -$position2);
-				endif;
+				
+          $position =  strpos($value['url'], '.' );
+				  $position2 = strlen($value['url']) - strpos($value['url'], '.' , $position);
+				  $service = substr($value['url'], 7, -$position2);
+				
+        endif;
 					
 					if(!preg_match('/'.$service.'/', $_SERVER['HTTP_HOST'])):
-						echo '<a href="'.$value['URI'].'">'.'<img src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/'.$service.'.png" alt="'.$service.'.png"/></a> ';
-					endif;
-			endif;
+						
+            echo '<a href="'.$value['url'].'">'.'<img src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/'.$service.'.png" alt="'.$service.'.png"/></a> ';
+					
+          endif;
+
 		
 		endforeach;
-		
-		
+
 	}
 		
 	function dyb_formation() {
 		
-		$arr = xmlUrl();
-		$formation = $arr['CandidateProfile']['EducationHistory']['EducationOrganizationAttendance'] ;
-		echo '<ul>';
-		foreach ($formation as $value) :
-			echo '<li>'.$value['OrganizationName'].' - ';
-			echo $value['EducationDegree']['DegreeName'].'</li>';
-		endforeach;
+		$arr = $this->info_cv() ;
+
+		$formation = $arr['resume']['educations']['education'] ;
+		
+    echo '<ul>';
+		  
+      foreach ($formation as $value) :
+			
+       echo '<li><p><strong>'.$value['school'].' - ';
+			 
+       echo $value['degree'].'</strong></p>';
+
+       echo '<p>'.$value['description'].'</p></li>';
+		  
+      endforeach;
 		
 		echo '</ul>';
 	} 
@@ -316,6 +410,18 @@ function wp_dyb($section) {
    if($section == 'contact'){
   	
   	return $wp_dyb->dyb_contact();
+  	
+  }
+
+   if($section == 'intro'){
+  	
+  	return $wp_dyb->dyb_intro();
+  	
+  }
+
+    if($section == 'formation'){
+  	
+  	return $wp_dyb->dyb_formation();
   	
   }
     
