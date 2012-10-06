@@ -25,7 +25,7 @@ Author URI: http://www.saugrin-sonia.fr/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/lib/oauth.php';
+ require WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/lib/oauth.php';   
 
 class wp_dyb {
 
@@ -33,11 +33,16 @@ class wp_dyb {
  function __construct(){
  
   $this->token = get_option( 'token_dyb', 'FALSE' ); 
-  $this->token_secret = get_option( 'token_secret', 'FALSE' );
+  $this->token_secret = get_option( 'token_dyb_secret', 'FALSE' );
 
 	add_action('admin_menu', array(&$this,'dyb_menu'));
   register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
+  
   add_action('dyb_maj', 'dyb_cron');
+  
+  add_action('init', 'startSession', 1);
+  add_action('wp_logout', 'endSession');
+  add_action('wp_login', 'endSession');
 	
 	wp_register_sidebar_widget(
     	
@@ -73,9 +78,24 @@ class wp_dyb {
 
   }
 
+ function startSession() {
+    
+    if(!session_id()) {
+        
+        session_start();
+    
+    }
+  }
+
+function endSession() {
+    
+    session_destroy ();
+
+} 
+
 function dyb_activation() {
 
-  $this->dyb_cron();
+  //$this->dyb_cron();
 
   wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'dyb_maj');
 
@@ -87,11 +107,13 @@ function dyb_menu() {
 	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz_16.png') );
   
   add_option("token_dyb", $_SESSION['access_token']);
-  add_option("token_secret", $_SESSION['token_access_secret']);
+  add_option("token_dyb_secret", $_SESSION['token_access_secret']);
 
 }
 
 function dyb_info_api() {
+
+  
 
   $this->key = 'ZK8Pkir-htOxEKgy7x8O';
   $this->secret = 'WnIiPN6Z3t7EnHCjwTY_uZG6f';
@@ -172,9 +194,9 @@ function dyb_cron() {
 }
 
 function dyb_views() {
-
-  session_start();
   
+  session_start();
+
   $OAUTH = $this->dyb_info_api();
 
   if ($this->token == ''):
@@ -182,6 +204,7 @@ function dyb_views() {
     if (isset($_GET['oauth_token'])):
 
       $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
+      $OAUTH->set_callback($this->callback_url);
 
       if(!isset($_SESSION['access_token'])) { 
         
@@ -192,14 +215,14 @@ function dyb_views() {
       }
 
       update_option("token_dyb", $_SESSION['access_token']);
-      update_option("token_secret", $_SESSION['token_access_secret']);
+      update_option("token_dyb_secret", $_SESSION['token_access_secret']);
       
       $this->views_user();
 
     else :
-
-      session_unset();
     
+      session_unset();
+
       $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
       $OAUTH->set_callback($this->callback_url);
   
@@ -218,6 +241,8 @@ function dyb_views() {
 
 
 function views_user() {
+
+  $this->dyb_cron();
 
   $info = $this->info_user();
 
