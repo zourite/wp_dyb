@@ -36,45 +36,56 @@ class wp_dyb {
   $this->token_secret = get_option( 'token_secret', 'FALSE' );
 
 	add_action('admin_menu', array(&$this,'dyb_menu'));
+  register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
+  add_action('dyb_maj', 'dyb_cron');
 	
 	wp_register_sidebar_widget(
     	
-    	'wp_dyb_status',        // your unique widget id
-    	'Statut DoYouBuzz',          // widget name
-    	array(&$this,'dyb_status'),  // callback function
-    	array(                  // options
+    	'wp_dyb_intro',        
+    	'Statut DoYouBuzz',          
+    	array(&$this,'dyb_intro'),  
+    	array(                 
         'description' => "Affiche la disponibilité pour un poste ou des opportunités"
     	
     	));
 
 	wp_register_sidebar_widget(
     	
-    	'wp_dyb_skill',        // your unique widget id
-    	'Compétences DoYouBuzz',          // widget name
-    	array(&$this,'dyb_skill'),  // callback function
+    	'wp_dyb_skill',        
+    	'Compétences DoYouBuzz',          
+    	array(&$this,'dyb_skill'),  
     	array( 
-    	                 // options
+    	                
         'description' => "Affiche la liste des compétences de votre CV"
     	
     	));
 
 	wp_register_sidebar_widget(
     	
-    	'wp_dyb_employment',        // your unique widget id
-    	'Experience DoYouBuzz',          // widget name
-    	array(&$this,'dyb_employment'),  // callback function
+    	'wp_dyb_employment',        
+    	'Experience DoYouBuzz',          
+    	array(&$this,'dyb_employment'), 
     	array(  
-    	                // options
+    	                
         'description' => "Affiche vos experiences professionnelle"
     	
     	));
 
   }
 
+function dyb_activation() {
+
+  $this->dyb_cron();
+
+  wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'dyb_maj');
+
+ } 
+
 
 function dyb_menu() {
 	
 	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),plugins_url('wp_dyb/img/doyoubuzz_16.png') );
+  
   add_option("token_dyb", $_SESSION['access_token']);
   add_option("token_secret", $_SESSION['token_access_secret']);
 
@@ -85,11 +96,79 @@ function dyb_info_api() {
   $this->key = 'ZK8Pkir-htOxEKgy7x8O';
   $this->secret = 'WnIiPN6Z3t7EnHCjwTY_uZG6f';
   $format = 'json';
-  $site_url = admin_url().'admin.php'; // Your site url (example : http://sandbox.local/dyb/)
-  $this->callback_url = '?page=dyb-zourite'; // Your relative callback URL
+  $site_url = admin_url().'admin.php'; 
+  $this->callback_url = '?page=dyb-zourite'; 
 
   return $OAUTH = new Oauth($site_url);
 
+}
+
+function info_user() {
+  
+  $info = file_get_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/user.xml');
+
+  return $this->xmlstring($info);
+}
+
+function info_cv($id = NULL) {
+
+  if($id == NULL):
+
+    $info = $this->info_user();
+
+    if ($info['user']['premium'] == '1') :
+      
+        $id = $info['user']['resumes']['resume'][0]['id'];
+  
+    else :
+
+       $id = $info['user']['resumes']['resume']['id'];
+
+    endif;
+
+  endif;  
+
+    $cv = file_get_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/'.$id.'_cv.xml');
+
+    return $this->xmlstring($cv);
+
+} 
+
+function dyb_cron() {
+
+   $OAUTH = $this->dyb_info_api();
+
+   $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
+
+   $info = $OAUTH->request('http://api.doyoubuzz.com/user', array(), $this->token, $this->token_secret);
+
+   file_put_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/user.xml', $info);
+
+   $info = $this->info_user();
+
+   if ($info['user']['premium'] == '1') :
+      
+      foreach ($info['user']['resumes']['resume'] as $key => $value) :
+
+        $id[] = $value['id'];
+
+      endforeach;
+    
+    else :
+
+      $id[] = $info['user']['resumes']['resume']['id'];
+
+      
+    endif;
+
+    foreach ($id as $key => $value) :
+          
+        $cv = $OAUTH->request("http://api.doyoubuzz.com/cv/$value", array(), $this->token, $this->token_secret);
+
+        file_put_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/'.$value.'_cv.xml', $cv);
+
+    endforeach;
+  
 }
 
 function dyb_views() {
@@ -103,12 +182,13 @@ function dyb_views() {
     if (isset($_GET['oauth_token'])):
 
       $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
-      //$OAUTH->set_callback($callback_url);
 
       if(!isset($_SESSION['access_token'])) { 
-      $token = $OAUTH->get_access_token($_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['token_secret']);
-      $_SESSION['access_token'] = $token['access_token'];
-      $_SESSION['token_access_secret'] = $token['token_secret'];
+        
+        $token = $OAUTH->get_access_token($_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['token_secret']);
+        $_SESSION['access_token'] = $token['access_token'];
+        $_SESSION['token_access_secret'] = $token['token_secret'];
+      
       }
 
       update_option("token_dyb", $_SESSION['access_token']);
@@ -125,7 +205,7 @@ function dyb_views() {
   
       $OAUTH->get_request_token();
 
-      echo '<a href="'.$OAUTH->get_user_authorization().'">test</a>';
+      echo '<a href="'.$OAUTH->get_user_authorization().'">Se connecter</a>';
   
     endif;
   
@@ -134,18 +214,6 @@ function dyb_views() {
     $this->views_user();
 
   endif;
-}
-
-function info_user() {
-
-   $OAUTH = $this->dyb_info_api();
-
-   $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
-
-	 $info = $OAUTH->request('http://api.doyoubuzz.com/user', array(), $this->token, $this->token_secret);
-
-   return $info = $this->xmlstring($info);
-  
 }
 
 
@@ -189,32 +257,6 @@ function xmlstring($xmlStr){
 	
 }
 
-function info_cv() {
-
-    $OAUTH = $this->dyb_info_api();
-
-    $info = $this->info_user();
-
-    $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
-    
-    if ($info['user']['premium'] == '1') :
-  
-      $id = $xml['user']['resumes']['resume'][0]['id'];
-    
-    else :
-
-      $id = $info['user']['resumes']['resume']['id'];
-
-    endif;
-  
-
-    $cv = $OAUTH->request("http://api.doyoubuzz.com/cv/$id", array(), $this->token, $this->token_secret);
-
-    $cv = $this->xmlstring($cv);
-
-    return $cv;
-
-}	
 	
 function dyb_skill(){
 	
@@ -259,8 +301,10 @@ function dyb_skill(){
 	 {
 	 
     global $wp_locale;
+
 		include(dirname(__FILE__) .'/country.php');
-		$arr = $this->info_cv();
+		
+    $arr = $this->info_cv();
 		
     $employment = $arr['resume']['experiences']['experience'];
 	
@@ -283,7 +327,6 @@ function dyb_skill(){
  
      <ul>	 		
      	<?php 
-     		//$desc = explode("\n", $value['PositionHistory']['Description']); 
      
      	foreach($value['missions']['mission'] as $mission) :
      
@@ -294,37 +337,56 @@ function dyb_skill(){
      <?php endforeach;
 	
 	}
-	
-	function dyb_status() {
 		
-		$arr = $this->info_cv();
-
-                      //
-    echo "<pre>";
-    print_r($arr['resume']['availability']);
-    echo "</pre>";
-   
-    //*/
-		$status = $arr['PositionSeekingStatusCode'];
-		$img_active = '<img style="vertical-align : middle" src="'.WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/circle-green.png"/> ';
-		
-		if($status == 'Active') echo "Je suis à la recherche d'un poste";
-		if($status == 'Passive') echo $img_active.'Ouvert aux opportunités';
-		
-	}
-	
 	function dyb_intro()
 	 
 	 {
 
     $arr = $this->info_cv();
 		
+    $baselist = file_get_contents(WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/baseslist.xml');
+    $baselist = $this->xmlstring($baselist);
+                 
+    $infoutcv = array( 'availability' => 'Disponibilité', 'seniority' =>'seniority','professionalStatus' => 'Status Professionnel');
+
+    foreach($baselist['base'] as $value):
+
+      foreach ($infoutcv as $key => $infocomp) :
+
+        if ($value['title'] == $infocomp) :
+
+            foreach($value['elements']['element'] as $element1):
+            
+              if($element1['id'] == $arr['resume'][$key]):
+
+                  $specs[$infocomp] = $element1['title'];
+
+              endif;  
+
+            endforeach;  
+
+        endif; 
+
+      endforeach;
+
+    endforeach;
+
+    $translatespecs = array('seniority' => 'Experience Proféssionnelle', 'Status Professionnel' => 'Statut', 'Disponibilité' => 'Disponibilité');
 
     $summary = $arr['resume']['presentation']['text'];
 	
-				
-		echo $summary;
-				
+	  echo '<p>'; 			
+		
+    echo $summary.'</p><p>';
+    
+
+    foreach ($specs as $key => $value) : ?>
+
+   <strong><?php echo $translatespecs[$key] ?></strong> : <?php echo $value ?><br/>
+      
+  <?php  endforeach;
+    
+	 	echo '</p>';	
 	}
 	
 	function dyb_contact()
@@ -382,7 +444,8 @@ function dyb_skill(){
 		echo '</ul>';
 	} 
 	
-	}
+}
+
 $wp_dyb = new wp_dyb();	
 
 function wp_dyb($section) {
