@@ -448,43 +448,43 @@ function dyb_skill($id = NULL){
 
 $wp_dyb = new wp_dyb();	
 
-function wp_dyb($section) {
+function wp_dyb($section, $id = NULL) {
 
   global $wp_dyb;
   
   if($section == 'status'){
   	
-  	return $wp_dyb->dyb_status();
+  	return $wp_dyb->dyb_status($id);
   	
   }
   
   if($section == 'employment'){
   	
-  	return $wp_dyb->dyb_employment();
+  	return $wp_dyb->dyb_employment($id);
   	
   }
  
   if($section == 'skill'){
   	
-  	return $wp_dyb->dyb_skill();
+  	return $wp_dyb->dyb_skill($id);
   	
   }
   
    if($section == 'contact'){
   	
-  	return $wp_dyb->dyb_contact();
+  	return $wp_dyb->dyb_contact($id);
   	
   }
 
    if($section == 'intro'){
   	
-  	return $wp_dyb->dyb_intro();
+  	return $wp_dyb->dyb_intro($id);
   	
   }
 
     if($section == 'formation'){
   	
-  	return $wp_dyb->dyb_formation();
+  	return $wp_dyb->dyb_formation($id);
   	
   }
     
