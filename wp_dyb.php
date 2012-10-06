@@ -95,7 +95,7 @@ function dyb_activation() {
 
 function dyb_menu() {
 	
-	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),basename(dirname(__FILE__)).'/img/doyoubuzz_16.png');
+	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),WP_PLUGIN_DIR.basename(dirname(__FILE__)).'/img/doyoubuzz_16.png');
   
   add_option("token_dyb", $_SESSION['access_token']);
   add_option("token_dyb_secret", $_SESSION['token_access_secret']);
