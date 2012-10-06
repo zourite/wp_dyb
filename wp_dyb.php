@@ -258,9 +258,9 @@ function xmlstring($xmlStr){
 }
 
 	
-function dyb_skill(){
+function dyb_skill($id = NULL){
 	
-	$arr = $this->info_cv() ;
+	$arr = $this->info_cv($id) ;
 
   $competences = $arr['resume']['skills']['skill'];
 
@@ -296,7 +296,7 @@ function dyb_skill(){
 
 }
 
-	 function dyb_employment()
+	 function dyb_employment($id = NULL)
 	 
 	 {
 	 
@@ -304,7 +304,7 @@ function dyb_skill(){
 
 		include(dirname(__FILE__) .'/country.php');
 		
-    $arr = $this->info_cv();
+    $arr = $this->info_cv($id);
 		
     $employment = $arr['resume']['experiences']['experience'];
 	
@@ -338,11 +338,11 @@ function dyb_skill(){
 	
 	}
 		
-	function dyb_intro()
+	function dyb_intro($id = NULL)
 	 
 	 {
 
-    $arr = $this->info_cv();
+    $arr = $this->info_cv($id);
 		
     $baselist = file_get_contents(WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/baseslist.xml');
     $baselist = $this->xmlstring($baselist);
@@ -389,11 +389,11 @@ function dyb_skill(){
 	 	echo '</p>';	
 	}
 	
-	function dyb_contact()
+	function dyb_contact($id = NULL)
 	 
 	 {
 	 	
-    $arr = $this->info_cv();
+    $arr = $this->info_cv($id);
 
 		$contact = $arr['resume']['links']['link'];
 				
@@ -423,9 +423,9 @@ function dyb_skill(){
 
 	}
 		
-	function dyb_formation() {
+	function dyb_formation($id = NULL) {
 		
-		$arr = $this->info_cv() ;
+		$arr = $this->info_cv($id) ;
 
 		$formation = $arr['resume']['educations']['education'] ;
 		
