@@ -41,6 +41,7 @@ class wp_dyb {
   add_action('dyb_maj', 'dyb_cron');
   
   add_action('init', 'startSession', 1);
+  add_action( 'init', 'session_start' );
   add_action('wp_logout', 'endSession');
   add_action('wp_login', 'endSession');
 	
