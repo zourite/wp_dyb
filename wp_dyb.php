@@ -25,7 +25,7 @@ Author URI: http://www.saugrin-sonia.fr/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require WP_PLUGIN_DIR.'/wp_dyb/lib/oauth.php';
+require WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/lib/oauth.php';
 
 class wp_dyb {
 
