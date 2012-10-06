@@ -39,8 +39,10 @@ class wp_dyb {
   register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
   
   add_action('dyb_maj', 'dyb_cron');
-  
+
   add_action( 'init', 'session_start' );
+  add_action('wp_logout', 'endSession');
+  add_action('wp_login', 'endSession');
 	
 	wp_register_sidebar_widget(
     	
@@ -75,6 +77,12 @@ class wp_dyb {
     	));
 
   }
+
+function endSession() {
+    
+    session_destroy ();
+
+} 
 
 function dyb_activation() {
 
