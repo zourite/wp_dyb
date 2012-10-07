@@ -37,6 +37,7 @@ class wp_dyb {
 
 	add_action('admin_menu', array(&$this,'dyb_menu'));
   register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
+  register_deactivation_hook(__FILE__, 'dyb_deactivation');
   
   add_action('dyb_maj', 'dyb_cron');
 
@@ -57,7 +58,13 @@ function dyb_activation() {
 
   wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'dyb_maj');
 
- } 
+ }
+
+function dyb_deactivation() {
+  
+  wp_clear_scheduled_hook('dyb_maj');
+
+} 
 
 
 function dyb_menu() {
