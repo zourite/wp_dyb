@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: wp_dyb
+Plugin Name: WP DYB
 Plugin URI: out
 Description: Publiez votre profile Doyoubuzz ou des sections de votre profile
 Version: 1.0
@@ -44,37 +44,6 @@ class wp_dyb {
   add_action('wp_logout', 'endSession');
   add_action('wp_login', 'endSession');
 	
-	wp_register_sidebar_widget(
-    	
-    	'wp_dyb_intro',        
-    	'Statut DoYouBuzz',          
-    	array(&$this,'dyb_intro'),  
-    	array(                 
-        'description' => "Affiche la description de votre cv"
-    	
-    	));
-
-	wp_register_sidebar_widget(
-    	
-    	'wp_dyb_skill',        
-    	'Compétences DoYouBuzz',          
-    	array(&$this,'dyb_skill'),  
-    	array( 
-    	                
-        'description' => "Affiche la liste des compétences de votre CV"
-    	
-    	));
-
-	wp_register_sidebar_widget(
-    	
-    	'wp_dyb_employment',        
-    	'Experience DoYouBuzz',          
-    	array(&$this,'dyb_employment'), 
-    	array(  
-    	                
-        'description' => "Affiche vos experiences professionnelle"
-    	
-    	));
 
   }
 
@@ -459,6 +428,8 @@ function dyb_skill($id = NULL){
 	} 
 	
 }
+
+add_shortcode('dyb_skill', array('MyPlugin', 'baztag_func'));
 
 $wp_dyb = new wp_dyb();	
 
