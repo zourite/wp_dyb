@@ -50,7 +50,7 @@ class wp_dyb {
     	'Statut DoYouBuzz',          
     	array(&$this,'dyb_intro'),  
     	array(                 
-        'description' => "Affiche la disponibilité pour un poste ou des opportunités"
+        'description' => "Affiche la description de votre cv"
     	
     	));
 
@@ -86,8 +86,6 @@ function endSession() {
 
 function dyb_activation() {
 
-  //$this->dyb_cron();
-
   wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'dyb_maj');
 
  } 
@@ -95,8 +93,9 @@ function dyb_activation() {
 
 function dyb_menu() {
 	
-	add_menu_page( 'Dyb Options', 'WP_DYB', 'manage_options', 'dyb-zourite',  array(&$this,'dyb_views'),WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/img/doyoubuzz_16.png');
-  
+	add_menu_page( 'Dyb Options', 'WP DYB', 'manage_options', 'dyb-accueil',  array(&$this,'dyb_views'),WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/doyoubuzz_16.png');
+  add_submenu_page( 'dyb-accueil', 'Dyb Mise à Jour', 'Dyb Mise à Jour', 'manage_options', 'dyb-maj', array(&$this,'dyb_cron'));
+
   add_option("token_dyb", $_SESSION['access_token']);
   add_option("token_dyb_secret", $_SESSION['token_access_secret']);
 
@@ -105,12 +104,11 @@ function dyb_menu() {
 function dyb_info_api() {
 
   
-
   $this->key = 'ZK8Pkir-htOxEKgy7x8O';
   $this->secret = 'WnIiPN6Z3t7EnHCjwTY_uZG6f';
   $format = 'json';
   $site_url = admin_url().'admin.php'; 
-  $this->callback_url = '?page=dyb-zourite'; 
+  $this->callback_url = '?page=dyb-accueil'; 
 
   return $OAUTH = new Oauth($site_url);
 
@@ -181,18 +179,20 @@ function dyb_cron() {
         file_put_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/'.$value.'_cv.xml', $cv);
 
     endforeach;
+
+    echo '<p><strong>Vos informations ont été correctement mis à jour</strong></p>';
   
 }
 
 function dyb_views() {
   
-  session_start();
-
   $OAUTH = $this->dyb_info_api();
 
   if ($this->token == ''):
 
     if (isset($_GET['oauth_token'])):
+
+      session_start();
 
       $OAUTH->set_site("http://www.doyoubuzz.com/fr/", $this->key, $this->secret);
       $OAUTH->set_callback($this->callback_url);
@@ -208,7 +208,7 @@ function dyb_views() {
       update_option("token_dyb", $_SESSION['access_token']);
       update_option("token_dyb_secret", $_SESSION['token_access_secret']);
       
-      $this->views_user();
+      echo '<p><a href="'.admin_url().'admin.php?page=dyb-maj"> Veuillez procéder à la mise à jour de vos informations</a></p>';
 
     else :
     
@@ -232,8 +232,6 @@ function dyb_views() {
 
 
 function views_user() {
-
-  $this->dyb_cron();
 
   $info = $this->info_user();
 
