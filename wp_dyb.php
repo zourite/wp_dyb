@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WP DYB
-Plugin URI: out
+Plugin URI: http://labo.saugrin-sonia.fr/wp-dyb
 Description: Publiez votre profile Doyoubuzz ou des sections de votre profile
-Version: 1.0
+Version: 1.1.1
 Author: Sonia SAUGRIN
 Author URI: http://www.saugrin-sonia.fr/
 */
@@ -29,37 +29,48 @@ require WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/lib/oauth.php';
 
 class wp_dyb {
 
+  protected static $instance = NULL;
 
- function __construct(){
+     public static function get_instance()
+     {
+         // create an object
+         NULL === self::$instance and self::$instance = new self;
+
+         return self::$instance; // return the object
+     }
+
+ function __construct() {
  
   $this->token = get_option( 'token_dyb', 'FALSE' ); 
   $this->token_secret = get_option( 'token_dyb_secret', 'FALSE' );
 
 	add_action('admin_menu', array(&$this,'dyb_menu'));
-  register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
-  register_deactivation_hook(__FILE__, 'dyb_deactivation');
+ // register_activation_hook( __FILE__, array( $this, 'dyb_activation' ) );
+  //register_deactivation_hook(__FILE__, 'dyb_deactivation');
   
-  add_action('dyb_maj', 'dyb_cron');
-
+  add_action('dyb_maj', 'dyb_connect');
   add_action( 'init', 'session_start' );
   add_action('wp_logout', 'endSession');
   add_action('wp_login', 'endSession');
+  add_action('admin_enqueue_scripts',  array(&$this,'admin_script'));
+
+// Sidebar Widget Intégration 
 
   wp_register_sidebar_widget(
       
-      'wp_dyb_status',        // your unique widget id
-      'Statut DoYouBuzz',          // widget name
-      array(&$this,'dyb_status'),  // callback function
-      array(                  // options
+      'wp_dyb_status',      
+      'Statut DoYouBuzz',          
+      array(&$this,'dyb_status'),  
+      array(                 
         'description' => "Affiche la disponibilité pour un poste ou des opportunités"
       
       ));
 
   wp_register_sidebar_widget(
       
-      'wp_dyb_skill',        // your unique widget id
-      'Compétences DoYouBuzz',          // widget name
-      array(&$this,'dyb_skill'),  // callback function
+      'wp_dyb_skill',       
+      'Compétences DoYouBuzz',          
+      array(&$this,'dyb_skill'),  
       array( 
                        // options
         'description' => "Affiche la liste des compétences de votre CV"
@@ -73,11 +84,20 @@ class wp_dyb {
       array(&$this,'dyb_employment'),  // callback function
       array(  
                       // options
-        'description' => "Affiche vos experiences professionnelle"
+        'description' => "Affiche vos experiences professionnelles"
       
       ));
 	
 
+  }
+
+// End Sidebar Widget integration
+
+
+function admin_script() {
+
+  wp_enqueue_style( 'wp_dyb', plugins_url('/css/wp_dyb.css', __FILE__), false, '1.0.0', 'all');
+      
   }
 
 function endSession() {
@@ -86,23 +106,11 @@ function endSession() {
 
 } 
 
-function dyb_activation() {
-
-  wp_schedule_event( current_time( 'timestamp' ), 'daily', 'dyb_maj');
-
- }
-
-function dyb_deactivation() {
-  
-  wp_clear_scheduled_hook('dyb_maj');
-
-} 
-
-
 function dyb_menu() {
 	
 	add_menu_page( 'Dyb Options', 'WP DYB', 'manage_options', 'dyb-accueil',  array(&$this,'dyb_views'),WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/img/doyoubuzz_16.png');
-  add_submenu_page( 'dyb-accueil', 'Dyb Mise à Jour', 'Dyb Mise à Jour', 'manage_options', 'dyb-maj', array(&$this,'dyb_cron'));
+
+  add_submenu_page( 'dyb-accueil','Mise à jour', 'Mise à jour', 'manage_options', 'dyb-maj', array(&$this,'dyb_connect'));
 
   add_option("token_dyb", $_SESSION['access_token']);
   add_option("token_dyb_secret", $_SESSION['token_access_secret']);
@@ -122,18 +130,40 @@ function dyb_info_api() {
 
 }
 
+// I use curl for prevent allow_fopen_url disable
+
+function get_content_curl($url) {
+
+  $resource = curl_init();
+ 
+  curl_setopt($resource, CURLOPT_URL, $url);
+  curl_setopt($resource, CURLOPT_HEADER, false);
+  curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($resource, CURLOPT_CONNECTTIMEOUT, 30);
+ // curl_setopt($resource, CURLOPT_ENCODING, 'UTF-8');
+ 
+  $content = curl_exec($resource);
+ 
+  curl_close($resource);
+
+  return $content;
+
+}
+///////////////////////////////////////////////////////
+
 function info_user() {
   
-  $info = file_get_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/user.xml');
-
+  $url = WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/user.xml';
+  $info = $this->get_content_curl($url);
+  
   return $this->xmlstring($info);
+
 }
 
-function info_cv($id = NULL) {
 
-  if($id == NULL):
+function get_id_cv() {
 
-    $info = $this->info_user();
+  $info = $this->info_user();
 
     if ($info['user']['premium'] == '1') :
       
@@ -145,15 +175,28 @@ function info_cv($id = NULL) {
 
     endif;
 
+    return $id;
+
+}
+
+function info_cv($id = NULL) {
+
+  if($id == NULL):
+
+      $id = $this->get_id_cv();
+
   endif;  
 
-    $cv = file_get_contents(WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'/'.$id.'_cv.xml');
+  $url = WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/'.$id.'_cv.xml';
 
-    return $this->xmlstring($cv);
+  $cv = $this->get_content_curl($url);
+
+
+  return $this->xmlstring($cv);
 
 } 
 
-function dyb_cron() {
+function dyb_connect() {
 
    $OAUTH = $this->dyb_info_api();
 
@@ -188,7 +231,7 @@ function dyb_cron() {
 
     endforeach;
 
-    echo '<p><strong>Vos informations ont été correctement mis à jour</strong></p>';
+    $this->views_user();
   
 }
 
@@ -216,7 +259,7 @@ function dyb_views() {
       update_option("token_dyb", $_SESSION['access_token']);
       update_option("token_dyb_secret", $_SESSION['token_access_secret']);
       
-      echo '<p><a href="'.admin_url().'admin.php?page=dyb-maj"> Veuillez procéder à la mise à jour de vos informations</a></p>';
+     include('views-inc/maj.php');
 
     else :
     
@@ -227,8 +270,8 @@ function dyb_views() {
   
       $OAUTH->get_request_token();
 
-      echo '<a href="'.$OAUTH->get_user_authorization().'">Se connecter</a>';
-  
+      include('views-inc/log.php');
+      
     endif;
   
   else :  
@@ -242,8 +285,11 @@ function dyb_views() {
 function views_user() {
 
   $info = $this->info_user();
+  $id = $this->get_id_cv();
 
-  include 'view.php';
+  $url_folder = WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__));
+
+  include('views-inc/view.php');
 
 }
 
@@ -257,13 +303,19 @@ function views_user() {
     }
     
     if (is_array($arrObjData)) {
+
         foreach ($arrObjData as $index => $value) {
+
             if (is_object($value) || is_array($value)) {
+
                 $value = $this->objectsIntoArray($value, $arrSkipIndices); // recursive call
             }
+
             if (in_array($index, $arrSkipIndices)) {
+
                 continue;
             }
+
             $arrData[$index] = $value;
         }
     } //*/
@@ -290,7 +342,7 @@ function dyb_skill($id = NULL){
      	
      	 		echo '<p><strong>'.$compet['title'].'</strong></p>';
      	 	
-     	 		echo '<ul>';
+     	 		echo '<ul class="dyb-skill">';
      	 		
      	 			foreach($compet['children'] as $value) :
 
@@ -334,29 +386,9 @@ function dyb_skill($id = NULL){
 
       $img = $value['logo'];
 
-      ?>
-     	 		      
-   			<p>
-   			<strong><?php echo $value['title'] ?></strong> chez <?php echo $value['company'] ?><br/>
-<small> <?php echo date_i18n(get_option('date_format') ,strtotime($value['start']))  ?> au <?php echo date_i18n(get_option('date_format'), strtotime($value['end']))  ?> | <?php echo $value['city'] ?> - <?php echo $country[$value['country']['isoCode']]['name'] ?></small>
-   			</p>
+    include('views-inc/employment.php');
 
-         <?php if(!empty($img)):?>
-
-          <img style="float:right" src="http://doyoubuzz.com/<?php echo $img ?>" />
-
-          <?php endif; ?>
- 
-     <ul>	 		
-     	<?php 
-     
-     	foreach($value['missions']['mission'] as $mission) :
-     
-     	echo '<li>'.$mission['description'].'</li>';
-     
-    	endforeach; ?>
-     </ul>
-     <?php endforeach;
+    endforeach;
 	
 	}
 		
@@ -366,7 +398,9 @@ function dyb_skill($id = NULL){
 
     $arr = $this->info_cv($id);
 		
-    $baselist = file_get_contents(WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/baseslist.xml');
+    $url = WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)).'/baseslist.xml';
+
+    $baselist = $this->get_content_curl($url);
     $baselist = $this->xmlstring($baselist);
                  
     $infoutcv = array( 'availability' => 'Disponibilité', 'seniority' =>'seniority','professionalStatus' => 'Status Professionnel');
@@ -402,9 +436,9 @@ function dyb_skill($id = NULL){
     echo $summary.'</p><p>';
     
 
-    foreach ($specs as $key => $value) : ?>
+     foreach ($specs as $key => $value) : ?>
 
-   <strong><?php echo $translatespecs[$key] ?></strong> : <?php echo $value ?><br/>
+   <strong><?php echo $translatespecs[$key] ?> </strong> : <?php echo $value ?> <br/>
       
   <?php  endforeach;
     
@@ -451,7 +485,7 @@ function dyb_skill($id = NULL){
 
 		$formation = $arr['resume']['educations']['education'] ;
 		
-    echo '<ul>';
+    echo '<ul class="dyb-formation">';
 		  
       foreach ($formation as $value) :
 			
@@ -468,7 +502,11 @@ function dyb_skill($id = NULL){
 	
 }
 
-$wp_dyb = new wp_dyb();	
+$wp_dyb = wp_dyb::get_instance(); 
+
+add_shortcode( 'dyb-skill', array( $wp_dyb, 'dyb_skill' ) );
+add_shortcode( 'dyb-exp', array( $wp_dyb, 'dyb_employment' ) );
+add_shortcode( 'dyb-school', array( $wp_dyb, 'dyb_formation' ) );
 
 function wp_dyb($section, $id = NULL) {
 
