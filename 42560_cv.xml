@@ -1,0 +1,486 @@
+<?xml version="1.0"?>
+<response>
+ <resume>
+  <id>42560</id>
+  <userId>44814</userId>
+  <title>Programmeur</title>
+  <url>http://www.doyoubuzz.com/sonia-marie-laurence-saugrin/</url>
+  <culture>fr_FR</culture>
+  <completion>1</completion>
+  <seniority>1</seniority>
+  <updatedAt>2017-03-13T08:37:17</updatedAt>
+  <professionalStatus>8</professionalStatus>
+  <availability>4</availability>
+  <blog>
+   <rss>http://www.saugrin-sonia.fr/feed</rss>
+  </blog>
+  <userInformation>
+   <birthdate>1987-12-07</birthdate>
+   <maritalStatus></maritalStatus>
+   <country>
+    <isoCode>REU</isoCode>
+   </country>
+   <city>Saint Denis</city>
+   <zipcode>97400</zipcode>
+   <DriversLicence></DriversLicence>
+   <state/>
+  </userInformation>
+  <presentation>
+   <text>Chaque choix à ses conséquences, certaines moins coûteuse que d'autres, de ce fait, je suis toujours à la recherche de solutions adaptées avec le moins de désagréments possible, pour répondre aux besoins internes ou externe d'une société.
+
+Les technologies sont pour moi une façon d'aider les gens, ils donnent un pouvoir à ceux qui les utilisent. Le pouvoir de partager, de liaison, de parler avec la terre entière.</text>
+   <home>1</home>
+  </presentation>
+  <experiences>
+   <experience>
+    <id>4277164</id>
+    <title>Développeur Indépendant</title>
+    <company>Freelance</company>
+    <city></city>
+    <start>2013-10-01</start>
+    <end></end>
+    <contractType/>
+    <numeric-key key="0"></numeric-key>
+    <numeric-key key="1"></numeric-key>
+    <logo/>
+    <description/>
+    <link/>
+    <missions>
+     <mission>
+      <description>Renforcement d'équipe</description>
+     </mission>
+     <mission>
+      <description>Développement de plusieurs applicatif métiers</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+   <experience>
+    <id>2613242</id>
+    <title>Developpeuse</title>
+    <company>Suricate Media</company>
+    <city></city>
+    <start>2012-03-01</start>
+    <end>2013-01-31</end>
+    <contractType>3</contractType>
+    <country>
+     <isoCode>REU</isoCode>
+    </country>
+    <numeric-key key="0"></numeric-key>
+    <logo/>
+    <description/>
+    <link/>
+    <missions>
+     <mission>
+      <description>Mise en place d'une stratégie de référencement sur le court, moyen et long terme.</description>
+     </mission>
+     <mission>
+      <description>Agencement d'une méthodologie de travail avec les différents collaborateurs de l'entreprise.</description>
+     </mission>
+     <mission>
+      <description>Configuration et installation d'un serveur Git.</description>
+     </mission>
+     <mission>
+      <description>Gestion de projet</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+   <experience>
+    <id>696107</id>
+    <title>Développeur - Administrateur Systéme</title>
+    <company>Silicon Village</company>
+    <city>St Denis</city>
+    <start>2010-11-01</start>
+    <end>2012-03-01</end>
+    <contractType>3</contractType>
+    <country>
+     <isoCode>REU</isoCode>
+    </country>
+    <numeric-key key="0"></numeric-key>
+    <logo>/var/f/dr/8u/dr8uJuHMxfPOt9heZlwTiRIrm1y-4a2ENoBVSz7GWv5YsK_0pD.jpg</logo>
+    <description></description>
+    <link/>
+    <missions>
+     <mission>
+      <description>Analyse des besoins et proposition de solution adapté</description>
+     </mission>
+     <mission>
+      <description> Mise en place et maintenance d'un serveur Web sous debian</description>
+     </mission>
+     <mission>
+      <description>Développement d'un CMS à l'aide du Framework Codeigniter</description>
+     </mission>
+     <mission>
+      <description>Développement d'application Facebook</description>
+     </mission>
+     <mission>
+      <description>Mise en place de différents sites avec Wordpress</description>
+     </mission>
+     <mission>
+      <description>Développement d'une Gallery Photo avec Codeigniter</description>
+     </mission>
+     <mission>
+      <description>Mise en place d'un script de téléchargement de fichier sur un serveur externe</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+   <experience>
+    <id>302386</id>
+    <title>Developpeur - Intégrateur</title>
+    <company>Cahri</company>
+    <city>St Denis</city>
+    <start>2010-07-01</start>
+    <end>2010-10-01</end>
+    <contractType>3</contractType>
+    <country>
+     <isoCode>REU</isoCode>
+    </country>
+    <numeric-key key="0"></numeric-key>
+    <logo>/var/f/dr/8u/dr8uazYKHfZsxB3M1XqvDGg-EST25umOk6QcR0ebFpCiUNhL48.jpg</logo>
+    <description>Cahri fait parti de ces agences que l’on peut qualifier d’entreprise 2.0. En effet Cahri a adopté les différents outils que nous offre le web dans le domaine de la collaboration et de la communication. Sortir.re et Sunkaz Immobilier compte parmi les productions de cette année(2010).</description>
+    <link/>
+    <missions>
+     <mission>
+      <description>Développement d'un Back Office avec le Framework Codeigniter</description>
+     </mission>
+     <mission>
+      <description>Decoupage HTML/CSS Pour application Iphone</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+   <experience>
+    <id>173027</id>
+    <title>Mise en place de différents site avec Wordpress</title>
+    <company>Marketprint Consultant</company>
+    <city>ST Pierre</city>
+    <start>2009-11-01</start>
+    <end>2010-02-01</end>
+    <contractType>3</contractType>
+    <country>
+     <isoCode>REU</isoCode>
+    </country>
+    <numeric-key key="0"></numeric-key>
+    <logo/>
+    <description>Société de services spécialisées dans le digital</description>
+    <link/>
+    <missions>
+     <mission>
+      <description>Mise en place du site http://www.campusmanagement.fr/ </description>
+     </mission>
+     <mission>
+      <description>Aide à la réalisation du site http://www.i974.com/event</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+   <experience>
+    <id>173024</id>
+    <title>Refonte d'i974.com</title>
+    <company>i974.com</company>
+    <city>ST Denis</city>
+    <start>2009-07-01</start>
+    <end>2009-10-01</end>
+    <contractType>3</contractType>
+    <country>
+     <isoCode>REU</isoCode>
+    </country>
+    <numeric-key key="0"></numeric-key>
+    <logo>/var/f/dr/8u/dr8uT1wX-0WC5bLSVnP2D3BUykFtEq6hzIHvZJQflaMojc4OG7.jpg</logo>
+    <description>Usages et Technologies de l'internet Réunionnais</description>
+    <link></link>
+    <missions>
+     <mission>
+      <description>Analyser et mettre en place des plugins adéquat à Wordpress en fonction des besoins</description>
+     </mission>
+     <mission>
+      <description>Création de fonctions spécifiques </description>
+     </mission>
+     <mission>
+      <description>Migration de données</description>
+     </mission>
+    </missions>
+    <home>1</home>
+   </experience>
+  </experiences>
+  <educations>
+   <education>
+    <id>1494869</id>
+    <school>SUPINFO - The International Institute of Information Technology</school>
+    <start>2008-09-01</start>
+    <end>2013-06-30</end>
+    <degree>Master of Science (M.Sc.)</degree>
+    <description></description>
+    <home>1</home>
+   </education>
+   <education>
+    <id>91282</id>
+    <school>Lycée Bellepierre</school>
+    <start>2006-08-01</start>
+    <end>2007-07-01</end>
+    <degree>Informatique de Gestion</degree>
+    <description>Etudes des langages tel que HTML,CSS,PHP mais aussi de la plateforme visual studio</description>
+    <home>1</home>
+   </education>
+  </educations>
+  <links>
+   <link>
+    <id>414726</id>
+    <type>Linked In</type>
+    <url>https://www.linkedin.com/in/ssaugrin</url>
+   </link>
+   <link>
+    <id>414727</id>
+    <type>Twitter</type>
+    <url>http://twitter.com/Zourite</url>
+   </link>
+   <link>
+    <id>17569</id>
+    <type>Viadeo</type>
+    <url>http://www.viadeo.com/en/profile/saugrin.sonia-marie-laurence</url>
+   </link>
+   <link>
+    <id>414728</id>
+    <type>Autre</type>
+    <url>http://www.saugrin-sonia.fr</url>
+   </link>
+   <link>
+    <id>17570</id>
+    <type>Twitter</type>
+    <url>http://www.twitter.com/zourite</url>
+   </link>
+   <link>
+    <id>17572</id>
+    <type>Mon blog</type>
+    <url>http://www.saugrin-sonia.fr</url>
+   </link>
+   <link>
+    <id>17573</id>
+    <type>Facebook</type>
+    <url>http://www.facebook.com/saugrin.s</url>
+   </link>
+   <link>
+    <id>96708</id>
+    <type>Linked In</type>
+    <url>http://www.linkedin.com/in/ssaugrin</url>
+   </link>
+  </links>
+  <contacts>
+   <contact>
+    <type>public_email</type>
+    <value>ssaugrin@gmail.com</value>
+   </contact>
+   <contact>
+    <type>skype</type>
+    <value>sonia.saugrin</value>
+   </contact>
+   <contact>
+    <type>address</type>
+    <value>
+     <address></address>
+     <zipcode>97400</zipcode>
+     <city></city>
+     <country>FR</country>
+    </value>
+   </contact>
+  </contacts>
+  <skills>
+   <skill>
+    <title>API</title>
+    <children>
+     <skill>
+      <title>Facebook</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>Google Search Shopping</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>Instagram</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>Twitter</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>Language et Framework</title>
+    <children>
+     <skill>
+      <title>PHP5, SQL, HTML, CSS, JQUERY</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>CodeIgniter</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>HTML5/CSS3</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>CMS</title>
+    <children>
+     <skill>
+      <title>Wordpress</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>SPIP</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>Administrateur Système</title>
+    <children>
+     <skill>
+      <title>Debian</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>Varnish</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+     <skill>
+      <title>Nginx</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>Gestion de projet</title>
+    <children>
+     <skill>
+      <title>Méthodes Agiles</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>Marketing</title>
+    <children>
+     <skill>
+      <title>Stratégies sur les différents réseaux sociaux</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+   <skill>
+    <title>Langues</title>
+    <children>
+     <skill>
+      <title>Anglais : lu, écrit</title>
+      <level/>
+      <details/>
+      <home>1</home>
+     </skill>
+    </children>
+    <level/>
+    <details/>
+    <home>1</home>
+   </skill>
+  </skills>
+  <interests>
+   <interest>
+    <title>Arts</title>
+    <children>
+     <interest>
+      <title>Montage Vidéo</title>
+      <children/>
+      <home>1</home>
+     </interest>
+    </children>
+    <home>1</home>
+   </interest>
+   <interest>
+    <title>Autre</title>
+    <children>
+     <interest>
+      <title>Veille informatique</title>
+      <children/>
+      <home>1</home>
+     </interest>
+     <interest>
+      <title>Wordpress</title>
+      <children/>
+      <home>1</home>
+     </interest>
+     <interest>
+      <title>NTIC</title>
+      <children/>
+      <home>1</home>
+     </interest>
+     <interest>
+      <title>Other</title>
+      <children/>
+      <home>1</home>
+     </interest>
+    </children>
+    <home>1</home>
+   </interest>
+  </interests>
+  <tags/>
+  <printable>
+   <pdf>http://www.doyoubuzz.com/sonia-marie-laurence-saugrin/cv/download/pdf?export_key=DR8uuUE-WWiEPcnbE_7A</pdf>
+   <odt/>
+   <doc>http://www.doyoubuzz.com/sonia-marie-laurence-saugrin/cv/download/rtf?export_key=DR8uuUE-WWiEPcnbE_7A</doc>
+  </printable>
+  <published>1</published>
+  <indexed>1</indexed>
+  <protected></protected>
+ </resume>
+</response>

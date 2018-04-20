@@ -1,0 +1,66 @@
+hr {
+
+	height: 5px;
+	color: #EC590B;
+	border-top: 1px solid #EC590B;
+	border-bottom: 1px solid #EC590B;
+}
+
+form {
+
+	margin-top: 5px;
+}
+
+.box-accueil {
+
+	width : 400px;
+	margin: auto;
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #fff;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+.center{
+
+	text-align: center;
+	margin: auto;
+}
+
+.img-dyb {
+
+	margin-right: 10px;
+	margin-bottom: 10px;
+	float: left;
+}
+
+.wrap p {
+
+	font-size: 1.1em;
+}
+
+.clearfix {
+
+	clear : both;
+}
+
+.connect-boutton {
+
+	text-align: center;
+	background-color: #F58C0F;
+	padding: 10px;
+	font-family: Helvetica;
+	text-decoration: none;
+	color: #fff;
+	display: block;
+	font-size: 1.5em;
+	font-weight: bolder;
+	border-radius: 5px;
+}
+
+.box-connect {
+
+	margin: 15px;
+}

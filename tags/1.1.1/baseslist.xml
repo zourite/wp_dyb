@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<response>
+ <base>
+  <title>seniority</title>
+  <elements>
+   <element>
+    <id>1</id>
+    <title>0 à 2 ans</title>
+   </element>
+   <element>
+    <id>2</id>
+    <title>3 à 5 ans</title>
+   </element>
+   <element>
+    <id>3</id>
+    <title>6 à 10 ans</title>
+   </element>
+   <element>
+    <id>4</id>
+    <title>+ de 10 ans</title>
+   </element>
+  </elements>
+ </base>
+ <base>
+  <title>Status Professionnel</title>
+  <elements>
+   <element>
+    <id>1</id>
+    <title>En poste</title>
+   </element>
+   <element>
+    <id>2</id>
+    <title>En fin de contrat</title>
+   </element>
+   <element>
+    <id>3</id>
+    <title>En recherche d'emploi</title>
+   </element>
+   <element>
+    <id>4</id>
+    <title>Freelance</title>
+   </element>
+   <element>
+    <id>5</id>
+    <title>Consultant</title>
+   </element>
+   <element>
+    <id>6</id>
+    <title>Entrepreneur</title>
+   </element>
+   <element>
+    <id>7</id>
+    <title>Porteur de projet</title>
+   </element>
+   <element>
+    <id>8</id>
+    <title>Etudiant</title>
+   </element>
+   <element>
+    <id>9</id>
+    <title>En fin d'études</title>
+   </element>
+   <element>
+    <id>10</id>
+    <title>Stagiaire</title>
+   </element>
+   <element>
+    <id>11</id>
+    <title>Apprenti</title>
+   </element>
+   <element>
+    <id>12</id>
+    <title>En alternance</title>
+   </element>
+   <element>
+    <id>13</id>
+    <title>Non renseigné</title>
+   </element>
+  </elements>
+ </base>
+ <base>
+  <title>Disponibilité</title>
+  <elements>
+   <element>
+    <id>1</id>
+    <title>Recherche active</title>
+   </element>
+   <element>
+    <id>2</id>
+    <title>Recherche de stage</title>
+   </element>
+   <element>
+    <id>3</id>
+    <title>En veille</title>
+   </element>
+   <element>
+    <id>4</id>
+    <title>Ouvert aux opportunités</title>
+   </element>
+   <element>
+    <id>5</id>
+    <title>Indisponible</title>
+   </element>
+  </elements>
+ </base>
+</response>

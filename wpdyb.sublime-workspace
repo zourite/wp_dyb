@@ -1,0 +1,238 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"medium",
+				"medium-10"
+			],
+			[
+				"nl",
+				"nl2br"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"background",
+				"background-color"
+			],
+			[
+				"tex",
+				"text-transform"
+			],
+			[
+				"style",
+				"stylesheet_directory"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"ba",
+				"background-color"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "inst",
+		"selected_items":
+		[
+			[
+				"inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 639.0
+	},
+	"console":
+	{
+		"height": 143.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/media/documents/www/ssaugrin/wp-content/plugins/dev-wp-dyb"
+	],
+	"file_history":
+	[
+		"/media/documents/www/ssaugrin/wp-content/themes/zourite/style.css",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-points-and-rewards/templates/myaccount/my-points.php",
+		"/media/documents/www/ssaugrin/wp-content/themes/zourite/about.php",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-points-and-rewards/woocommerce-points-and-rewards.php",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-points-and-rewards-m/woocommerce-points-and-rewards.php",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-subscriptions-m/woocommerce-subscriptions.php",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-smart-coupons-m/woocommerce-smart-coupons.php",
+		"/media/documents/www/noutbox/wp-content/plugins/woocommerce-smart-coupons/woocommerce-smart-coupons.php",
+		"/media/documents/www/gaelparoche/index.html",
+		"/media/documents/www/gaelparoche/liste.php",
+		"/media/documents/www/gaelparoche/annonce.php",
+		"/media/documents/www/pimentrouge/wp-content/themes/pimentrouge/index.php",
+		"/media/documents/www/gaelparoche/css/app.css",
+		"/media/documents/www/gaelparoche/header.html",
+		"/media/documents/www/gaelparoche/footer.html",
+		"/media/documents/www/gaelparoche/js/app.js",
+		"/media/documents/www/ssaugrin/wp-content/themes/zourite/footer.php",
+		"/media/documents/www/gaelparoche/dploy.yaml",
+		"/home/ssaugrin/Téléchargements/foundation-6.4.2-custom/index.html",
+		"/media/documents/www/gaelparoche/xml.php",
+		"/media/documents/www/ssaugrin/wp-content/plugins/wp-dyb/wp_dyb.php",
+		"/media/documents/www/gaelparoche/form-test.html",
+		"/media/documents/www/pimentrouge/wp-content/themes/pimentrouge/Gruntfile.js",
+		"/home/ssaugrin/Téléchargements/Hover-master/css/demo-page.css",
+		"/media/documents/www/ssaugrin/wp-content/themes/zourite/header.php",
+		"/media/documents/www/pimentrouge/wp-content/themes/pimentrouge/header.php",
+		"/media/documents/www/pimentrouge/wp-config.php",
+		"/home/ssaugrin/Documents/site.sql/data.sql",
+		"/media/documents/www/ssaugrin/wp-config.php",
+		"/home/ssaugrin/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/ssaugrin/.config/sublime-text-3/Packages/User/WakaTime.sublime-settings",
+		"/home/ssaugrin/.config/sublime-text-3/Packages/Material Theme/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"com"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 35.0
+	},
+	"input":
+	{
+		"height": 73.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "wpdyb.sublime-project",
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

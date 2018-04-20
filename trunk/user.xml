@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<response>
+ <user>
+  <id>44814</id>
+  <lastname>SAUGRIN</lastname>
+  <firstname>Sonia Marie Laurence</firstname>
+  <slug>sonia-marie-laurence-saugrin</slug>
+  <registeredAt>2010-04-24T03:48:41</registeredAt>
+  <updatedAt>2014-03-04T10:20:11</updatedAt>
+  <email>66397@supinfo.com</email>
+  <avatars>
+   <tiny>http://www.doyoubuzz.com/var/users/_/2010/4/24/3/44814/avatar/42560/avatar_tn.jpg</tiny>
+   <normal>http://www.doyoubuzz.com/var/users/_/2010/4/24/3/44814/avatar/42560/avatar_cp.jpg</normal>
+   <big>http://www.doyoubuzz.com/var/users/_/2010/4/24/3/44814/avatar/42560/avatar_cp_big.jpg</big>
+  </avatars>
+  <premium></premium>
+  <resumes>
+   <resume>
+    <id>42560</id>
+    <title>Développeur Web</title>
+    <main>1</main>
+    <translation/>
+    <culture>fr_FR</culture>
+    <completion>1</completion>
+    <published>1</published>
+    <indexed>1</indexed>
+    <protected></protected>
+   </resume>
+  </resumes>
+ </user>
+</response>
